@@ -6,8 +6,9 @@ output: github_document
 ---
 
 I first load the required packages 
-```{r cars}
+```{r loading, message=FALSE}
 library(palmerpenguins)
+library(tidyverse)
 ```
 
 ## Problem 1
@@ -16,6 +17,12 @@ First let's load in the data set
 ```{r}
 data("penguins", package = "palmerpenguins")
 penguins
+
 ```
 
-This data set is made up of `r nrow(penguins)` rows and `r ncol(penguins)` columns. The `r ncol(penguins)` variables are `r colnames(penguins)`. Species, island, and sex are factors, bill_length_mm and bill_depth_mm are numeric and flipper_length_mm, body_mass_g and year are integers.
+This data set is made up of `r nrow(penguins)` rows and `r ncol(penguins)` columns. The `r ncol(penguins)` variables are `r colnames(penguins)`. Species, island, and sex are factors, bill_length_mm and bill_depth_mm are numeric and flipper_length_mm, body_mass_g and year are integers. The mean bill depth is `r mean(penguins$bill_depth_mm,na.rm =TRUE)`. The mean bill length is `r mean(penguins$bill_length_mm,na.rm =TRUE)`. The mean flipper length is `r mean(penguins$flipper_length_mm,na.rm =TRUE)`.The mean body mass is `r mean(penguins$body_mass_g,na.rm =TRUE)`
+
+```{r}
+ggplot(penguins,aes(x=bill_length_mm,y=flipper_length_mm),)+geom_point()
+
+```
