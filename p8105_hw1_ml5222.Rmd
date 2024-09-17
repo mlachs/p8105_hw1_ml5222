@@ -17,14 +17,69 @@ First let's load in the data set
 ```{r}
 data("penguins", package = "palmerpenguins")
 penguins
-
 ```
 
-This data set is made up of `r nrow(penguins)` rows and `r ncol(penguins)` columns. There are some values of NA within the data. The `r ncol(penguins)` variables are `r colnames(penguins)`. Species, island, and sex are factors, bill_length_mm and bill_depth_mm are numeric and flipper_length_mm, body_mass_g and year are integers. The mean bill depth is `r mean(penguins$bill_depth_mm,na.rm =TRUE)`. The mean bill length is `r mean(penguins$bill_length_mm,na.rm =TRUE)`. The mean flipper length is `r mean(penguins$flipper_length_mm,na.rm =TRUE)`.The mean body mass is `r mean(penguins$body_mass_g,na.rm =TRUE)`
+This data set is made up of `r nrow(penguins)` rows and `r ncol(penguins)` columns. There are some values of NA within the data. The `r ncol(penguins)` variables are `r colnames(penguins)`. Species, island, and sex are factors, bill_length_mm and bill_depth_mm are numeric and flipper_length_mm, body_mass_g and year are integers. The mean bill depth is `r mean(penguins[['bill_depth_mm']],na.rm =TRUE)`. The mean bill length is `r mean(penguins$bill_length_mm,na.rm =TRUE)`. The mean flipper length is `r mean(penguins$flipper_length_mm,na.rm =TRUE)`.The mean body mass is `r mean(penguins$body_mass_g,na.rm =TRUE)`
 
 Let's take a look at the relationship between flipper length and bill length by species. 
 
-```{r}
+```{r warning=FALSE,message=FALSE}
 ggplot(penguins,aes(x=bill_length_mm,y=flipper_length_mm, colour = species))+geom_point()
+```
+
+There seems to be a relationship, let's save this plot for future use. 
+```{r warning=FALSE,message=FALSE}
+ggsave(filename='flipper_bill_scatter.png')
+```
+
+## Problem 2
+
+Let's create a data frame 
+```{r}
+hw_df = tibble(
+  rand_samp = rnorm(10),
+  grt_0 = rand_samp>0,
+  char_var= c('a','b','c','d','e','f','g','h','i','j'),
+  fact_var= factor(c("A","B","O","A","A","B","B","A","O","A"))
+  )
+
 
 ```
+Lets get the mean of the random sample
+```{r}
+mean(pull(hw_df,rand_samp))
+```
+
+Lets try to get the mean of the logical vector
+```{r}
+mean(pull(hw_df,grt_0))
+```
+
+Lets try to get the mean of the character vector
+
+```{r}
+mean(pull(hw_df,char_var))
+```
+
+Lets try to get the mean of the factor 
+
+```{r}
+mean(pull(hw_df,fact_var))
+```
+
+It looks like only numeric and logical inputs work with mean function
+
+Let's try converting the non-numeric vectors
+```{r, eval=FALSE}
+as.numeric(pull(hw_df,grt_0))
+as.numeric(pull(hw_df,char_var))
+as.numeric(pull(hw_df,fact_var))
+```
+While logical and factor vectors were able to be converted, the character vector just returned NAs. This helps explain why the logical vector was able to be used as a mean. The character vector could not be easily converted and therefore had no values to calculate. 
+
+```{r}
+fact_var_test= factor(c(1,1,1,2,3,3,1,1,2,3))
+mean(fact_var_test)
+```
+
+Even when the factor is converted to numbers the mean can't be found. This is because they are not really numbers but categories in which the values fall. You could think of the values as the word "one" instead of the actual numeric value.
